@@ -1,0 +1,137 @@
+/* ── CSS Variables ── */
+:root {
+  --bg: #f5f7fb;
+  --bg-card: #ffffff;
+  --text: #212529;
+  --text-muted: #6c757d;
+  --border: #dee2e6;
+  --input-bg: #ffffff;
+  --input-text: #212529;
+  --table-bg: #ffffff;
+  --table-stripe: #f8f9fa;
+  --table-border: #dee2e6;
+  --navbar-bg: #212529;
+}
+
+.dark {
+  --bg: #121212;
+  --bg-card: #1e1e1e;
+  --text: #e0e0e0;
+  --text-muted: #aaaaaa;
+  --border: #333333;
+  --input-bg: #2a2a2a;
+  --input-text: #e0e0e0;
+  --table-bg: #1e1e1e;
+  --table-stripe: #252525;
+  --table-border: #333333;
+  --navbar-bg: #0d0d0d;
+}
+
+/* ── Base ── */
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ── Cards ── */
+.card {
+  background-color: var(--bg-card);
+  border-color: var(--border) !important;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-body {
+  background-color: var(--bg-card);
+  color: var(--text);
+  border-radius: 15px;
+}
+
+/* ── Text ── */
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+h1, h2, h3, h4, h5, h6, p, span, td, th, label {
+  color: var(--text);
+}
+
+/* ── Inputs & Textareas ── */
+.form-control,
+.form-select {
+  background-color: var(--input-bg) !important;
+  color: var(--input-text) !important;
+  border-color: var(--border) !important;
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--input-bg) !important;
+  color: var(--input-text) !important;
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* ── Tables ── */
+.table {
+  color: var(--text);
+  border-color: var(--table-border);
+}
+
+.table > :not(caption) > * > * {
+  background-color: var(--table-bg);
+  color: var(--text);
+  border-color: var(--table-border);
+}
+
+.table-light {
+  background-color: var(--table-stripe) !important;
+  color: var(--text) !important;
+}
+
+.table-light th {
+  background-color: var(--table-stripe) !important;
+  color: var(--text) !important;
+}
+
+.table-hover > tbody > tr:hover > * {
+  background-color: var(--table-stripe);
+  color: var(--text);
+}
+
+/* ── Alerts ── */
+.dark .alert-primary {
+  background-color: #1a2a4a;
+  border-color: #1a3a6a;
+  color: #90caf9;
+}
+
+.dark .alert-info {
+  background-color: #0d2a33;
+  border-color: #0d3a4a;
+  color: #80deea;
+}
+
+/* ── Navbar ── */
+.dark .navbar {
+  background-color: var(--navbar-bg) !important;
+}
+
+/* ── Buttons ── */
+.btn {
+  border-radius: 10px;
+}
+
+/* ── Progress bar track ── */
+.dark .progress {
+  background-color: #333333;
+}
