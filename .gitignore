@@ -33,3 +33,4 @@ backend/firebase_key.json
 
 .env
 backend/.env
+.vercel
