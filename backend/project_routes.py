@@ -1,7 +1,18 @@
 from fastapi import APIRouter
 from firebase_config import db
+from datetime import datetime
 
 router = APIRouter()
+
+def add_activity(action, item):
+
+    db.collection("activity_logs").add({
+        "action": action,
+        "item": item,
+        "timestamp": datetime.now().strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+    })
 
 @router.get("/projects")
 def get_projects():
@@ -22,15 +33,18 @@ def get_projects():
 
 
 @router.post("/projects")
-def create_project(
-    project: dict
-):
+def create_project(project: dict):
 
     db.collection(
         "projects"
     ).document(
         str(project["id"])
     ).set(project)
+
+    add_activity(
+        "Created Project",
+        project["name"]
+    )
 
     return {
         "message":
@@ -45,11 +59,24 @@ def delete_project(
     project_id: int
 ):
 
-    db.collection(
+    doc_ref = db.collection(
         "projects"
     ).document(
         str(project_id)
-    ).delete()
+    )
+
+    doc = doc_ref.get()
+
+    if doc.exists:
+
+        project = doc.to_dict()
+
+        add_activity(
+            "Deleted Project",
+            project["name"]
+        )
+
+    doc_ref.delete()
 
     return {
         "message":

@@ -76,22 +76,34 @@ useEffect(() => {
         <td>
 
           {log.action === "Created Task" && (
-            <span className="badge bg-success">
-              Created
-            </span>
-          )}
+  <span className="badge bg-success">
+    Created Task
+  </span>
+)}
 
-          {log.action === "Updated Task" && (
-            <span className="badge bg-warning text-dark">
-              Updated
-            </span>
-          )}
+{log.action === "Updated Task" && (
+  <span className="badge bg-warning text-dark">
+    Updated Task
+  </span>
+)}
 
-          {log.action === "Deleted Task" && (
-            <span className="badge bg-danger">
-              Deleted
-            </span>
-          )}
+{log.action === "Deleted Task" && (
+  <span className="badge bg-danger">
+    Deleted Task
+  </span>
+)}
+
+{log.action === "Created Project" && (
+  <span className="badge bg-primary">
+    Created Project
+  </span>
+)}
+
+{log.action === "Deleted Project" && (
+  <span className="badge bg-dark">
+    Deleted Project
+  </span>
+)}
 
         </td>
 
