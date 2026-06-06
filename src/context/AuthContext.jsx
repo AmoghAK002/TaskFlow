@@ -3,7 +3,8 @@ import {
   useState,
   useEffect
 } from "react";
-
+import { auth } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import { getTasks } from "../api/taskApi";
 
 export const AuthContext = createContext();
@@ -41,9 +42,26 @@ function AuthProvider({ children }) {
 
   useEffect(() => {
 
-    loadTasks();
+  loadTasks();
 
-  }, []);
+  const unsubscribe = onAuthStateChanged(
+    auth,
+    (currentUser) => {
+
+      if (currentUser) {
+        setUser(currentUser.email);
+      } else {
+        setUser(null);
+      }
+
+      setLoading(false);
+
+    }
+  );
+
+  return () => unsubscribe();
+
+}, []);
 
   return (
     <AuthContext.Provider
