@@ -24,7 +24,44 @@ function Register() {
   const handleRegister = async (e) => {
 
     e.preventDefault();
+    if (!email.trim()) {
+  alert("Email is required");
+  return;
+}
 
+const emailRegex =
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailRegex.test(email)) {
+  alert("Enter a valid email");
+  return;
+}
+
+if (!password) {
+  alert("Password is required");
+  return;
+}
+
+if (password.length < 6) {
+  alert(
+    "Password must contain at least 6 characters"
+  );
+  return;
+}
+
+if (!/[A-Z]/.test(password)) {
+  alert(
+    "Password must contain one uppercase letter"
+  );
+  return;
+}
+
+if (!/[0-9]/.test(password)) {
+  alert(
+    "Password must contain one number"
+  );
+  return;
+}
     try {
 
       await createUserWithEmailAndPassword(
@@ -102,8 +139,13 @@ function Register() {
           />
 
           <small className="text-muted">
-            Password should be at least 6 characters
-          </small>
+Password must contain:
+<ul>
+  <li>Minimum 6 characters</li>
+  <li>One uppercase letter</li>
+  <li>One number</li>
+</ul>
+</small>
 
           <button
             className="btn btn-success w-100 mt-3"

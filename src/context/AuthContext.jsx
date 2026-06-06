@@ -51,6 +51,11 @@ const [loading, setLoading] =
     auth,
     (currentUser) => {
 
+      console.log(
+  "Firebase User:",
+  currentUser
+);
+
       if (currentUser) {
         setUser(currentUser.email);
       } else {

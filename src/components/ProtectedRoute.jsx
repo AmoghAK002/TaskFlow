@@ -8,7 +8,15 @@ function ProtectedRoute({ children }) {
     user,
     authLoading
   } = useContext(AuthContext);
+    console.log(
+  "ProtectedRoute User:",
+  user
+);
 
+console.log(
+  "ProtectedRoute Loading:",
+  authLoading
+);
   if (authLoading) {
 
     return (

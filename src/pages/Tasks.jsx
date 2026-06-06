@@ -64,7 +64,38 @@ const [selectedProject,
 
   const handleAddTask = async () => {
 
-  if (!taskTitle.trim()) return;
+ if (!taskTitle.trim()) {
+  alert("Task title is required");
+  return;
+}
+
+if (taskTitle.trim().length < 3) {
+  alert("Task title must be at least 3 characters");
+  return;
+}
+
+if (!selectedProject) {
+  alert("Please select a project");
+  return;
+}
+
+if (!assignedTo.trim()) {
+  alert("Assigned To field is required");
+  return;
+}
+
+const emailRegex =
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailRegex.test(assignedTo)) {
+  alert("Enter a valid email address");
+  return;
+}
+
+if (!dueDate) {
+  alert("Please select a due date");
+  return;
+}
 
   const newTask = {
   id: Date.now(),

@@ -48,12 +48,20 @@ function Projects() {
   const handleAddProject =
     async () => {
 
-      if (
-        !projectName.trim()
-      ) {
-        alert("Enter project name");
-        return;
-      }
+     if (!projectName.trim()) {
+  alert("Project name is required");
+  return;
+}
+
+if (projectName.trim().length < 3) {
+  alert("Project name must be at least 3 characters");
+  return;
+}
+
+if (projectName.trim().length > 50) {
+  alert("Project name cannot exceed 50 characters");
+  return;
+}
 
       const newProject = {
         id: Date.now(),

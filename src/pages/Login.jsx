@@ -41,7 +41,30 @@ function Login() {
     async (e) => {
 
       e.preventDefault();
+      if (!email.trim()) {
+  alert("Email is required");
+  return;
+}
 
+const emailRegex =
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailRegex.test(email)) {
+  alert("Enter a valid email");
+  return;
+}
+
+if (!password) {
+  alert("Password is required");
+  return;
+}
+
+if (password.length < 6) {
+  alert(
+    "Password must be at least 6 characters"
+  );
+  return;
+}
       try {
 
         const userCredential =
