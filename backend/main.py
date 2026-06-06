@@ -9,13 +9,14 @@ app = FastAPI(title="TaskFlow AI API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"
-                   "https://taskflow-ai-eight-chi.vercel.app"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://taskflow-ai-eight-chi.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 app.include_router(router)
 app.include_router(project_router)
 
