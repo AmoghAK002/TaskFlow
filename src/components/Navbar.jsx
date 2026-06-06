@@ -49,7 +49,7 @@ function Navbar() {
           className="navbar-brand fw-bold fs-5"
           to="/dashboard"
         >
-          🚀 TaskFlow AI Pro
+          🚀 TaskFlow 
         </Link>
 
         <div className="navbar-nav me-auto gap-2">

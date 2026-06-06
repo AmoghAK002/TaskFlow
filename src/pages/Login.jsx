@@ -106,7 +106,7 @@ function Login() {
         <div className="card shadow-lg border-0 rounded-3 p-4">
 
           <h1 className="fw-bold text-center">
-            🚀 TaskFlow AI
+            🚀 TaskFlow 
           </h1>
 
           <p className="text-muted text-center">
