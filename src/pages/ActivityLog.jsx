@@ -5,16 +5,27 @@ function ActivityLog() {
 
   const [logs, setLogs] = useState([]);
 
-  useEffect(() => {
+useEffect(() => {
 
-    axios
-  .get("http://127.0.0.1:8000/activity-logs")
-  .then((res) => {
+  axios
+    .get(
+      "https://taskflow-ai-backend-fh74.onrender.com/activity-logs"
+    )
+    .then((res) => {
 
-    setLogs(res.data);
+      setLogs(res.data);
 
-  });
-  }, []);
+    })
+    .catch((err) => {
+
+      console.error(
+        "Failed to fetch logs",
+        err
+      );
+
+    });
+
+}, []);
 
   return (
     <div className="container mt-4">
