@@ -6,10 +6,10 @@ function ProtectedRoute({ children }) {
 
   const {
     user,
-    loading
+    authLoading
   } = useContext(AuthContext);
 
-  if (loading) {
+  if (authLoading) {
 
     return (
       <div className="text-center mt-5">

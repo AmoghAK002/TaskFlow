@@ -15,8 +15,11 @@ function AuthProvider({ children }) {
 
   const [tasks, setTasks] = useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [authLoading, setAuthLoading] =
+  useState(true);
+
+const [loading, setLoading] =
+  useState(false);
 
   const loadTasks = async () => {
 
@@ -54,7 +57,7 @@ function AuthProvider({ children }) {
         setUser(null);
       }
 
-      setLoading(false);
+      setAuthLoading(false);
 
     }
   );
@@ -66,14 +69,15 @@ function AuthProvider({ children }) {
   return (
     <AuthContext.Provider
       value={{
-        user,
-        setUser,
-        tasks,
-        setTasks,
-        loading,
-        setLoading,
-        loadTasks
-      }}
+  user,
+  setUser,
+  tasks,
+  setTasks,
+  loading,
+  setLoading,
+  authLoading,
+  loadTasks
+}}
     >
       {children}
     </AuthContext.Provider>
