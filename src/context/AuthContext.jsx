@@ -48,53 +48,58 @@ const [loading, setLoading] =
 
   useEffect(() => {
 
-  loadTasks();
-
   const unsubscribe = onAuthStateChanged(
+
     auth,
-    (currentUser) => {
+
+    async (currentUser) => {
 
       console.log(
-  "Firebase User:",
-  currentUser
-);
+        "Firebase User:",
+        currentUser
+      );
 
       if (currentUser) {
 
-  setUser(
-    currentUser.email
-  );
+        setUser(
+          currentUser.email
+        );
 
-  if (
+        if (
 
-    currentUser.email ===
-    "amoghak2004@gmail.com"
+          currentUser.email ===
+          "amoghak2004@gmail.com"
 
-  ) {
+        ) {
 
-    setRole("admin");
+          setRole("admin");
 
-  }
+        }
 
-  else {
+        else {
 
-    setRole("user");
+          setRole("user");
 
-  }
+        }
 
-}
+        await loadTasks();
 
-else {
+      }
 
-  setUser(null);
+      else {
 
-  setRole("user");
+        setUser(null);
 
-}
+        setRole("user");
+
+        setTasks([]);
+
+      }
 
       setAuthLoading(false);
 
     }
+
   );
 
   return () => unsubscribe();
