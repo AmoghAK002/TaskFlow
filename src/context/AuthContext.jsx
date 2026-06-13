@@ -13,6 +13,9 @@ function AuthProvider({ children }) {
 
   const [user, setUser] = useState(null);
 
+  const [role, setRole] =
+  useState("user");
+
   const [tasks, setTasks] = useState([]);
 
   const [authLoading, setAuthLoading] =
@@ -57,10 +60,37 @@ const [loading, setLoading] =
 );
 
       if (currentUser) {
-        setUser(currentUser.email);
-      } else {
-        setUser(null);
-      }
+
+  setUser(
+    currentUser.email
+  );
+
+  if (
+
+    currentUser.email ===
+    "amoghak2004@gmail.com"
+
+  ) {
+
+    setRole("admin");
+
+  }
+
+  else {
+
+    setRole("user");
+
+  }
+
+}
+
+else {
+
+  setUser(null);
+
+  setRole("user");
+
+}
 
       setAuthLoading(false);
 
@@ -74,14 +104,23 @@ const [loading, setLoading] =
   return (
     <AuthContext.Provider
       value={{
-  user,
-  setUser,
-  tasks,
-  setTasks,
-  loading,
-  setLoading,
-  authLoading,
-  loadTasks
+
+user,
+setUser,
+
+role,
+setRole,
+
+tasks,
+setTasks,
+
+loading,
+setLoading,
+
+authLoading,
+
+loadTasks
+
 }}
     >
       {children}

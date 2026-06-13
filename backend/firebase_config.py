@@ -1,18 +1,12 @@
 import firebase_admin
-import json
-import os
 
 from firebase_admin import (
     credentials,
     firestore
 )
 
-firebase_creds = json.loads(
-    os.environ["FIREBASE_CREDENTIALS"]
-)
-
 cred = credentials.Certificate(
-    firebase_creds
+    "firebase_key.json"
 )
 
 firebase_admin.initialize_app(

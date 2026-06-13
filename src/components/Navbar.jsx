@@ -6,6 +6,9 @@ import { auth } from "../firebase";
 
 function Navbar() {
 
+  const { role } =
+  useContext(AuthContext);
+
   const { user, setUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -91,15 +94,33 @@ function Navbar() {
                 📋 Tasks
               </NavLink>
 
-              <NavLink
-                className={({ isActive }) =>
-                  isActive                    ? "nav-link fw-semibold text-warning"
-                    : "nav-link fw-semibold"
-                }
-                to="/activity-log"  
-              >
-                📝 Activity Log
-              </NavLink>
+              {
+
+role === "admin" && (
+
+<NavLink
+
+className={({ isActive }) =>
+
+isActive
+
+? "nav-link fw-semibold text-warning"
+
+: "nav-link fw-semibold"
+
+}
+
+to="/activity-log"
+
+>
+
+📝 Activity Log
+
+</NavLink>
+
+)
+
+}
 
             </>
 

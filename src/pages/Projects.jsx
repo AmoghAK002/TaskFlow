@@ -9,7 +9,15 @@ import {
   deleteProject
 } from "../api/projectApi";
 
+import { useContext } from "react";
+
+import { AuthContext }
+from "../context/AuthContext";
+
 function Projects() {
+
+  const { role } =
+useContext(AuthContext);
 
   const [projects, setProjects] =
     useState([]);
@@ -47,7 +55,15 @@ function Projects() {
 
   const handleAddProject =
     async () => {
+      if(role !== "admin"){
 
+alert(
+"Access Denied"
+);
+
+return;
+
+}
      if (!projectName.trim()) {
   alert("Project name is required");
   return;
@@ -88,24 +104,34 @@ if (projectName.trim().length > 50) {
     };
 
   const handleDeleteProject =
-    async (id) => {
+  async (id) => {
 
-      try {
+    if(role !== "admin"){
 
-        await deleteProject(
-          id
-        );
+      alert(
+        "Access Denied"
+      );
 
-        await loadProjects();
+      return;
 
-      } catch (error) {
+    }
 
-        console.error(
-          error
-        );
+    try {
 
-      }
-    };
+      await deleteProject(
+        id
+      );
+
+      await loadProjects();
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+    }
+  };
 
   return (
     <div
@@ -128,7 +154,8 @@ if (projectName.trim().length > 50) {
     {projects.length}
   </h2>
 </div>
-
+{
+role === "admin" && (
       <div className="card shadow-lg border-0 p-4 mb-4">
 
   <h5 className="mb-3">
@@ -157,6 +184,8 @@ if (projectName.trim().length > 50) {
   </button>
 
 </div>
+)
+}
 
       <div className="row">
 
@@ -193,7 +222,8 @@ if (projectName.trim().length > 50) {
           <p className="text-muted small">
             Created and ready for task management
           </p>
-
+{
+role === "admin" && (
           <button
             className="
             btn
@@ -214,6 +244,8 @@ if (projectName.trim().length > 50) {
           >
             Delete Project
           </button>
+          )
+}
 
         </div>
 
