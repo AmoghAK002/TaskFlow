@@ -14,6 +14,26 @@ import { useContext } from "react";
 import { AuthContext }
 from "../context/AuthContext";
 
+import {
+
+collection,
+
+onSnapshot
+
+}
+
+from
+
+"firebase/firestore";
+
+import {
+
+db
+
+}
+
+from "../firebase";
+
 function Projects() {
 
   const { role } =
@@ -25,33 +45,63 @@ useContext(AuthContext);
   const [projectName,
     setProjectName] =
     useState("");
+const loadProjects = () => {
 
-  const loadProjects =
-    async () => {
+  const unsubscribe =
 
-      try {
+    onSnapshot(
 
-        const response =
-          await getProjects();
+      collection(
+        db,
+        "projects"
+      ),
 
-        setProjects(
-          response.data
-        );
+      (snapshot) => {
 
-      } catch (error) {
+        const data =
 
-        console.error(
-          error
-        );
+          snapshot.docs.map(
+
+            (doc) => ({
+
+              id: doc.id,
+
+              ...doc.data()
+
+            })
+
+          );
+
+        setProjects(data);
+
+      },
+
+      (error) => {
+
+        console.error(error);
 
       }
-    };
 
-  useEffect(() => {
+    );
+
+  return unsubscribe;
+
+};
+
+
+useEffect(() => {
+
+  const unsubscribe =
 
     loadProjects();
 
-  }, []);
+  return () => {
+
+    unsubscribe();
+
+  };
+
+}, []);
 
   const handleAddProject =
     async () => {
@@ -90,8 +140,6 @@ if (projectName.trim().length > 50) {
           newProject
         );
 
-        await loadProjects();
-
         setProjectName("");
 
       } catch (error) {
@@ -121,8 +169,6 @@ if (projectName.trim().length > 50) {
       await deleteProject(
         id
       );
-
-      await loadProjects();
 
     } catch (error) {
 
