@@ -1,184 +1,202 @@
-import {
-  createContext,
-  useState,
-  useEffect
-} from "react";
-import { auth } from "../firebase";
-import { onAuthStateChanged } from "firebase/auth";
-import {
+  import {
+    createContext,
+    useState,
+    useEffect
+  } from "react";
+  import { auth } from "../firebase";
+  import { onAuthStateChanged } from "firebase/auth";
+  import {
 
-collection,
+  collection,
 
-onSnapshot
+  onSnapshot
 
-}
+  }
 
-from "firebase/firestore";
+  from "firebase/firestore";
 
-import {
+  import {
 
-db
+  db
 
-}
+  }
 
-from "../firebase";
+  from "../firebase";
 
-export const AuthContext = createContext();
+  export const AuthContext = createContext();
 
-function AuthProvider({ children }) {
+  function AuthProvider({ children }) {
 
-  const [user, setUser] = useState(null);
+    let unsubscribeTasks = null;
 
-  const [role, setRole] =
-  useState("user");
+    const [user, setUser] = useState(null);
 
-  const [tasks, setTasks] = useState([]);
+    const [role, setRole] =
+    useState("user");
 
-  const [authLoading, setAuthLoading] =
-  useState(true);
+    const [tasks, setTasks] = useState([]);
 
-const [loading, setLoading] =
-  useState(false);
+    const [authLoading, setAuthLoading] =
+    useState(true);
 
-  const loadTasks = () => {
+  const [loading, setLoading] =
+    useState(false);
 
-setLoading(true);
+    const loadTasks = () => {
 
-const unsubscribe =
+  setLoading(true);
 
-onSnapshot(
+  const unsubscribe =
 
-collection(
+  onSnapshot(
 
-db,
+  collection(
 
-"tasks"
+  db,
 
-),
+  "tasks"
 
-(snapshot)=>{
+  ),
 
-const data =
+  (snapshot)=>{
 
-snapshot.docs.map(
+  const data =
 
-(doc)=>({
+  snapshot.docs.map(
 
-id:
+  (doc)=>({
 
-doc.id,
+  id:
 
-...doc.data()
+  doc.id,
 
-})
+  ...doc.data()
 
-);
+  })
 
-setTasks(data);
+  );
 
-setLoading(false);
+  setTasks(data);
 
-},
+  setLoading(false);
 
-(error)=>{
+  },
 
-console.error(error);
+  (error)=>{
 
-setLoading(false);
+  console.error(error);
 
-}
+  setLoading(false);
 
-);
+  }
 
-return unsubscribe;
+  );
 
-};
+  return unsubscribe;
 
-  useEffect(() => {
+  };
 
-  const unsubscribe = onAuthStateChanged(
+    useEffect(() => {
 
-    auth,
+    const unsubscribe = onAuthStateChanged(
 
-    async (currentUser) => {
+      auth,
 
-      console.log(
-        "Firebase User:",
-        currentUser
-      );
+      async (currentUser) => {
 
-      if (currentUser) {
-
-        setUser(
-          currentUser.email
+        console.log(
+          "Firebase User:",
+          currentUser
         );
 
-        if (
+        if (currentUser) {
 
-          currentUser.email ===
-          "amoghak2004@gmail.com"
+          setUser(
+            currentUser.email
+          );
 
-        ) {
+          if (
 
-          setRole("admin");
+            currentUser.email ===
+            "amoghak2004@gmail.com"
+
+          ) {
+
+            setRole("admin");
+
+          }
+
+          else {
+
+            setRole("user");
+
+          }
+
+          unsubscribeTasks =
+
+loadTasks();
 
         }
 
         else {
 
+          setUser(null);
+
           setRole("user");
+
+          setTasks([]);
 
         }
 
-        loadTasks();
+        setAuthLoading(false);
 
       }
 
-      else {
+    );
 
-        setUser(null);
+    return () => {
 
-        setRole("user");
+unsubscribe();
 
-        setTasks([]);
+if (
 
-      }
+unsubscribeTasks
 
-      setAuthLoading(false);
+) {
 
-    }
+unsubscribeTasks();
 
-  );
-
-  return () => unsubscribe();
-
-}, []);
-
-  return (
-    <AuthContext.Provider
-      value={{
-
-user,
-setUser,
-
-role,
-setRole,
-
-tasks,
-setTasks,
-
-loading,
-setLoading,
-
-authLoading,
-
-loadTasks
-
-}}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
 }
 
-export default AuthProvider;
+};
+
+  }, []);
+
+    return (
+      <AuthContext.Provider
+        value={{
+
+  user,
+  setUser,
+
+  role,
+  setRole,
+
+  tasks,
+  setTasks,
+
+  loading,
+  setLoading,
+
+  authLoading,
+
+  loadTasks
+
+  }}
+      >
+        {children}
+      </AuthContext.Provider>
+    );
+  }
+
+  export default AuthProvider;

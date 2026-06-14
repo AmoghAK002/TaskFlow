@@ -12,15 +12,41 @@ import {
 import {
   generateTaskDescription
 } from "../api/geminiApi";
+import {
+
+collection,
+
+onSnapshot
+
+}
+
+from "firebase/firestore";
+
+import {
+
+db
+
+}
+
+from "../firebase";
 
 function Tasks() {
-  const {
-  user,
-  tasks,
-  setTasks,
-  loading,
-  loadTasks
-} = useContext(AuthContext);
+
+const {
+
+user,
+
+role,
+
+tasks,
+
+setTasks,
+
+loading,
+
+loadTasks
+
+} = useContext(AuthContext);  
 
   const [taskTitle, setTaskTitle] = useState("");
 const [priority, setPriority] = useState("Medium");
@@ -44,25 +70,65 @@ const [selectedProject,
   setProjectFilter] =
   useState("");
 
-  const loadProjects = async () => {
+ const loadProjects = () => {
 
-  try {
+const unsubscribe =
 
-    const response =
-      await getProjects();
+onSnapshot(
 
-    setProjects(
-      response.data
-    );
+collection(
 
-  } catch (error) {
+db,
 
-    console.error(error);
+"projects"
 
-  }
+),
+
+(snapshot)=>{
+
+const data =
+
+snapshot.docs.map(
+
+(doc)=>({
+
+id:
+
+doc.id,
+
+...doc.data()
+
+})
+
+);
+
+setProjects(data);
+
+},
+
+(error)=>{
+
+console.error(error);
+
+}
+
+);
+
+return unsubscribe;
+
 };
 
   const handleAddTask = async () => {
+
+if(role !== "admin"){
+
+alert(
+"Access Denied"
+);
+
+return;
+
+}
 
  if (!taskTitle.trim()) {
   alert("Task title is required");
@@ -154,6 +220,16 @@ setSelectedProject("");
 
   const handleDeleteTask = async (id) => {
 
+if(role !== "admin"){
+
+alert(
+"Access Denied"
+);
+
+return;
+
+}
+
   try {
 
     await deleteTask(id);
@@ -225,7 +301,18 @@ setSelectedProject("");
 
     }
   };
+
   const handleEditTask = async (id) => {
+
+if(role !== "admin"){
+
+alert(
+"Access Denied"
+);
+
+return;
+
+}
 
   const taskToEdit = tasks.find(
     task => task.id === id
@@ -261,7 +348,15 @@ setSelectedProject("");
 
 useEffect(() => {
 
-  loadProjects();
+const unsubscribe =
+
+loadProjects();
+
+return ()=>{
+
+unsubscribe();
+
+};
 
 }, []);
 
@@ -341,6 +436,8 @@ if (loading) {
     <h4 className="mb-3">
       Welcome {user}
     </h4>
+{
+  role === "admin" && (
 
     <div className="card shadow-lg border-0 p-4 mb-4">
 
@@ -473,6 +570,8 @@ if (loading) {
 </div>
 
     </div>
+  )
+}
 
     <input
       type="text"
@@ -670,23 +769,35 @@ if (loading) {
 
           <div className="d-flex gap-2">
 
-            <button
-              className="btn btn-warning btn-sm"
-              onClick={() =>
-                handleEditTask(task.id)
-              }
-            >
-              Edit
-            </button>
+            {
+role === "admin" && (
 
-            <button
-              className="btn btn-danger btn-sm"
-              onClick={() =>
-                handleDeleteTask(task.id)
-              }
-            >
-              Delete
-            </button>
+<button
+className="btn btn-warning btn-sm"
+onClick={() =>
+handleEditTask(task.id)
+}
+>
+Edit
+</button>
+
+)
+}
+
+            {
+role === "admin" && (
+
+<button
+className="btn btn-danger btn-sm"
+onClick={() =>
+handleDeleteTask(task.id)
+}
+>
+Delete
+</button>
+
+)
+}
 
           </div>
 
@@ -791,23 +902,35 @@ if (loading) {
 
           <div className="d-flex gap-2">
 
-            <button
-              className="btn btn-warning btn-sm"
-              onClick={() =>
-                handleEditTask(task.id)
-              }
-            >
-              Edit
-            </button>
+            {
+role === "admin" && (
 
-            <button
-              className="btn btn-danger btn-sm"
-              onClick={() =>
-                handleDeleteTask(task.id)
-              }
-            >
-              Delete
-            </button>
+<button
+className="btn btn-warning btn-sm"
+onClick={() =>
+handleEditTask(task.id)
+}
+>
+Edit
+</button>
+
+)
+}
+
+            {
+role === "admin" && (
+
+<button
+className="btn btn-danger btn-sm"
+onClick={() =>
+handleDeleteTask(task.id)
+}
+>
+Delete
+</button>
+
+)
+}
 
           </div>
 
@@ -913,23 +1036,35 @@ if (loading) {
 
           <div className="d-flex gap-2">
 
-            <button
-              className="btn btn-warning btn-sm"
-              onClick={() =>
-                handleEditTask(task.id)
-              }
-            >
-              Edit
-            </button>
+            {
+role === "admin" && (
 
-            <button
-              className="btn btn-danger btn-sm"
-              onClick={() =>
-                handleDeleteTask(task.id)
-              }
-            >
-              Delete
-            </button>
+<button
+className="btn btn-warning btn-sm"
+onClick={() =>
+handleEditTask(task.id)
+}
+>
+Edit
+</button>
+
+)
+}
+
+            {
+role === "admin" && (
+
+<button
+className="btn btn-danger btn-sm"
+onClick={() =>
+handleDeleteTask(task.id)
+}
+>
+Delete
+</button>
+
+)
+}
 
           </div>
 
