@@ -1,5 +1,50 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import {
+
+Pie,
+
+Bar
+
+}
+
+from "react-chartjs-2";
+
+import {
+
+Chart as ChartJS,
+
+ArcElement,
+
+Tooltip,
+
+Legend,
+
+CategoryScale,
+
+LinearScale,
+
+BarElement
+
+}
+
+from "chart.js";
+
+ChartJS.register(
+
+ArcElement,
+
+Tooltip,
+
+Legend,
+
+CategoryScale,
+
+LinearScale,
+
+BarElement
+
+);
 
 
 function Dashboard() {
@@ -36,6 +81,126 @@ function Dashboard() {
       task.status !== "Completed"
   ).length;
 
+  const progressTasks = tasks.filter(
+
+task =>
+
+task.status ===
+
+"In Progress"
+
+).length;
+
+
+const pieData = {
+
+labels: [
+
+"Pending",
+
+"In Progress",
+
+"Completed"
+
+],
+
+datasets: [
+
+{
+
+data: [
+
+pendingTasks,
+
+progressTasks,
+
+completedTasks
+
+],
+
+backgroundColor: [
+
+"#ffc107",
+
+"#0d6efd",
+
+"#198754"
+
+],
+
+borderWidth: 1
+
+}
+
+]
+
+};
+
+const lowPriorityTasks = tasks.filter(
+
+task =>
+
+task.priority ===
+
+"Low"
+
+).length;
+
+
+const mediumPriorityTasks = tasks.filter(
+
+task =>
+
+task.priority ===
+
+"Medium"
+
+).length;
+
+
+const barData = {
+
+labels: [
+
+"High",
+
+"Medium",
+
+"Low"
+
+],
+
+datasets: [
+
+{
+
+label: "Tasks",
+
+data: [
+
+highPriorityTasks,
+
+mediumPriorityTasks,
+
+lowPriorityTasks
+
+],
+
+backgroundColor: [
+
+"#dc3545",
+
+"#ffc107",
+
+"#198754"
+
+]
+
+}
+
+]
+
+};
 
   return (
     <div className="container mt-4">
@@ -136,6 +301,66 @@ function Dashboard() {
           </div>
         </div>
       </div>
+
+      <div className="card shadow-lg border-0 p-4 mb-4">
+
+<h4 className="mb-4">
+
+📊 Task Status Overview
+
+</h4>
+
+<div
+
+style={{
+
+width: "350px",
+
+margin: "auto"
+
+}}
+
+>
+
+<Pie
+
+data={pieData}
+
+/>
+
+</div>
+
+</div>
+
+<div className="card shadow-lg border-0 p-4 mb-4">
+
+<h4 className="mb-4">
+
+🔥 Task Priority Distribution
+
+</h4>
+
+<div
+
+style={{
+
+width: "700px",
+
+margin: "auto"
+
+}}
+
+>
+
+<Bar
+
+data={barData}
+
+/>
+
+</div>
+
+</div>
 
       <div className="card shadow-lg border-0 mt-2">
         <div className="card-body">
