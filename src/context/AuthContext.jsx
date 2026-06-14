@@ -5,7 +5,23 @@ import {
 } from "react";
 import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { getTasks } from "../api/taskApi";
+import {
+
+collection,
+
+onSnapshot
+
+}
+
+from "firebase/firestore";
+
+import {
+
+db
+
+}
+
+from "../firebase";
 
 export const AuthContext = createContext();
 
@@ -24,27 +40,59 @@ function AuthProvider({ children }) {
 const [loading, setLoading] =
   useState(false);
 
-  const loadTasks = async () => {
+  const loadTasks = () => {
 
-    try {
+setLoading(true);
 
-      setLoading(true);
+const unsubscribe =
 
-      const response =
-        await getTasks();
+onSnapshot(
 
-      setTasks(response.data);
+collection(
 
-    } catch (error) {
+db,
 
-      console.error(error);
+"tasks"
 
-    } finally {
+),
 
-      setLoading(false);
+(snapshot)=>{
 
-    }
-  };
+const data =
+
+snapshot.docs.map(
+
+(doc)=>({
+
+id:
+
+doc.id,
+
+...doc.data()
+
+})
+
+);
+
+setTasks(data);
+
+setLoading(false);
+
+},
+
+(error)=>{
+
+console.error(error);
+
+setLoading(false);
+
+}
+
+);
+
+return unsubscribe;
+
+};
 
   useEffect(() => {
 
@@ -82,7 +130,7 @@ const [loading, setLoading] =
 
         }
 
-        await loadTasks();
+        loadTasks();
 
       }
 
