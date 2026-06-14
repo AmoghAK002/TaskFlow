@@ -30,6 +30,18 @@ db
 
 from "../firebase";
 
+import {
+
+DragDropContext,
+
+Droppable,
+
+Draggable
+
+}
+
+from "@hello-pangea/dnd";
+
 function Tasks() {
 
 const {
@@ -115,6 +127,66 @@ console.error(error);
 );
 
 return unsubscribe;
+
+};
+
+const onDragEnd = async (result) => {
+
+  if (!result.destination) {
+
+    return;
+
+  }
+
+  const taskId = Number(
+    result.draggableId
+  );
+
+  const newStatus =
+    result.destination.droppableId;
+
+  const taskToUpdate =
+    tasks.find(
+
+      task =>
+
+      String(task.id) ===
+
+      result.draggableId
+
+    );
+
+  if (!taskToUpdate) {
+
+    return;
+
+  }
+
+  const updatedTask = {
+
+    ...taskToUpdate,
+
+    status: newStatus
+
+  };
+
+  try {
+
+    await updateTask(
+
+      taskId,
+
+      updatedTask
+
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+  }
 
 };
 
@@ -423,7 +495,14 @@ if (loading) {
 }
 
  return (
-  <div className="container mt-4">
+
+<DragDropContext
+
+onDragEnd={onDragEnd}
+
+>
+
+<div className="container mt-4">
 
     <h1 className="display-4 fw-bold mb-2">
   📋 Task Management
@@ -666,146 +745,241 @@ if (loading) {
 
   <div className="col-md-4">
 
-    <div className="card shadow p-3 border-warning">
+<Droppable droppableId="Pending">
 
-      <h3 className="text-center text-warning fw-bold">
-        TODO
-      </h3>
-      {
-  todoTasks.length === 0 && (
-    <p className="text-center text-muted">
-      No pending tasks
-    </p>
-  )
-}
+{(provided) => (
 
-      {todoTasks.map((task) => (
+<div
 
-        <div
-          key={task.id}
-          className="card shadow-sm border-warning p-3 mb-3 h-100"
-        >
+className="card shadow p-3 border-warning"
 
-          <h6 className="fw-bold">
-  {task.title}
+ref={provided.innerRef}
+
+{...provided.droppableProps}
+
+>
+
+<h3 className="text-center text-warning fw-bold">
+
+TODO
+
+</h3>
+
+{
+
+todoTasks.map(
+
+(task, index) => (
+
+<Draggable
+
+key={String(task.id)}
+
+draggableId={String(task.id)}
+
+index={index}
+
+>
+
+{(provided) => (
+
+<div
+
+ref={provided.innerRef}
+
+{...provided.draggableProps}
+
+{...provided.dragHandleProps}
+
+className="card shadow-sm border-warning p-3 mb-3 h-100"
+
+>
+
+<h6 className="fw-bold">
+
+{task.title}
+
 </h6>
 
 <span
-  className={
-    task.status === "Completed"
-      ? "badge bg-success mb-2"
-      : task.status === "In Progress"
-      ? "badge bg-primary mb-2"
-      : "badge bg-warning text-dark mb-2"
-  }
+
+className={
+
+task.status === "Completed"
+
+? "badge bg-success mb-2"
+
+: task.status === "In Progress"
+
+? "badge bg-primary mb-2"
+
+: "badge bg-warning text-dark mb-2"
+
+}
+
 >
-  {task.status}
+
+{task.status}
+
 </span>
+
 <p className="small text-muted">
-  {task.description?.length > 80
-    ? task.description.substring(0, 80) + "..."
-    : task.description}
+
+{task.description?.length > 80
+
+? task.description.substring(0, 80) + "..."
+
+: task.description}
+
 </p>
 
-          <span
-            className={
-              task.priority === "High"
-                ? "badge bg-danger mb-2"
-                : task.priority === "Medium"
-                ? "badge bg-warning text-dark mb-2"
-                : "badge bg-success mb-2"
-            }
-          >
-            {task.priority}
-          </span>
+<span
 
-          <small className="text-muted d-block">
-  📁 {task.projectName}
+className={
+
+task.priority === "High"
+
+? "badge bg-danger mb-2"
+
+: task.priority === "Medium"
+
+? "badge bg-warning text-dark mb-2"
+
+: "badge bg-success mb-2"
+
+}
+
+>
+
+{task.priority}
+
+</span>
+
+<small className="text-muted d-block">
+
+📁 {task.projectName}
+
 </small>
 
 <small className="text-primary d-block">
-  👤 {task.assignedTo}
+
+👤 {task.assignedTo}
+
 </small>
 
 <small
-  className={
-    task.dueDate &&
-    task.dueDate <
-      new Date()
-        .toISOString()
-        .split("T")[0]
-      &&
-    task.status !== "Completed"
-      ? "text-danger fw-bold d-block"
-      : "text-secondary d-block"
-  }
+
+className={
+
+task.dueDate &&
+
+task.dueDate <
+
+new Date()
+
+.toISOString()
+
+.split("T")[0]
+
+&&
+
+task.status !== "Completed"
+
+? "text-danger fw-bold d-block"
+
+: "text-secondary d-block"
+
+}
+
 >
-  📅 {task.dueDate}
+
+📅 {task.dueDate}
+
 </small>
 
-          <select
-            className="form-select mb-2"
-            value={task.status}
-            onChange={(e) =>
-              handleStatusChange(
-                task.id,
-                e.target.value
-              )
-            }
-          >
-            <option value="Pending">
-              Todo
-            </option>
+<select
 
-            <option value="In Progress">
-              In Progress
-            </option>
+className="form-select mb-2"
 
-            <option value="Completed">
-              Done
-            </option>
+value={task.status}
 
-          </select>
+onChange={(e) =>
 
-          <div className="d-flex gap-2">
+handleStatusChange(
 
-            {
-role === "admin" && (
+task.id,
+
+e.target.value
+
+)
+
+}
+
+>
+
+<option value="Pending">Todo</option>
+
+<option value="In Progress">In Progress</option>
+
+<option value="Completed">Done</option>
+
+</select>
+
+<div className="d-flex gap-2">
+
+{role === "admin" && (
 
 <button
+
 className="btn btn-warning btn-sm"
-onClick={() =>
-handleEditTask(task.id)
-}
+
+onClick={() => handleEditTask(task.id)}
+
 >
+
 Edit
+
 </button>
 
-)
-}
+)}
 
-            {
-role === "admin" && (
+{role === "admin" && (
 
 <button
+
 className="btn btn-danger btn-sm"
-onClick={() =>
-handleDeleteTask(task.id)
-}
+
+onClick={() => handleDeleteTask(task.id)}
+
 >
+
 Delete
+
 </button>
 
+)}
+
+</div>
+
+</div>
+
+)}
+
+</Draggable>
+
 )
+
+)
+
 }
 
-          </div>
+{provided.placeholder}
 
-        </div>
+</div>
 
-      ))}
+)}
 
-    </div>
+</Droppable>
 
   </div>
 
@@ -1079,6 +1253,9 @@ Delete
 </div>
 
   </div>
+
+</DragDropContext>
+
 );
 }
 
