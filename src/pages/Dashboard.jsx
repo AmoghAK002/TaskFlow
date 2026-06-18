@@ -1,5 +1,16 @@
-import { useContext } from "react";
+import {
+
+useContext,
+
+useState
+
+}
+
+from "react";
 import { AuthContext } from "../context/AuthContext";
+import Calendar from "react-calendar";
+
+import "react-calendar/dist/Calendar.css";
 import {
 
 Pie,
@@ -51,6 +62,14 @@ function Dashboard() {
 
   const { tasks, user } = useContext(AuthContext);
 
+  const [date, setDate] =
+
+useState(
+
+new Date()
+
+);
+
   const totalTasks = tasks.length;
 
   const completedTasks = tasks.filter(
@@ -80,6 +99,27 @@ function Dashboard() {
       task.dueDate < today &&
       task.status !== "Completed"
   ).length;
+
+  const selectedDate =
+
+date
+
+.toISOString()
+
+.split("T")[0];
+
+
+const tasksOnDate =
+
+tasks.filter(
+
+task =>
+
+task.dueDate ===
+
+selectedDate
+
+);
 
   const progressTasks = tasks.filter(
 
@@ -206,6 +246,24 @@ backgroundColor: [
     <div className="container mt-4">
 
       <style>{`
+
+      .react-calendar{
+
+width: 500px;
+
+max-width: 100%;
+
+border: none;
+
+font-size: 18px;
+
+}
+
+.react-calendar__tile{
+
+height: 60px;
+
+}
         .dashboard-card {
           transition: 0.3s;
         }
@@ -314,7 +372,7 @@ backgroundColor: [
 
 style={{
 
-width: "350px",
+width: "500px",
 
 margin: "auto"
 
@@ -361,7 +419,105 @@ data={barData}
 </div>
 
 </div>
+      <div className="card shadow-lg border-0 p-4 mb-4">
 
+<h4 className="mb-4">
+
+📅 Task Calendar
+
+</h4>
+
+<div className="d-flex justify-content-center">
+
+<Calendar
+
+onChange={setDate}
+
+value={date}
+
+/>
+
+</div>
+
+<hr />
+
+<h5 className="mt-3">
+
+Tasks on {selectedDate}
+
+</h5>
+
+{
+
+tasksOnDate.length === 0 ?
+
+(
+
+<p className="text-muted">
+
+No tasks due
+
+</p>
+
+)
+
+:
+
+(
+
+<ul className="list-group">
+
+{
+
+tasksOnDate.map(
+
+(task)=>(
+
+<li
+
+key={task.id}
+
+className="list-group-item"
+
+>
+
+<strong>
+
+{task.title}
+
+</strong>
+
+<br/>
+
+<span>
+
+📁 {task.projectName}
+
+</span>
+
+<br/>
+
+<span>
+
+🔥 {task.priority}
+
+</span>
+
+</li>
+
+)
+
+)
+
+}
+
+</ul>
+
+)
+
+}
+
+</div>
       <div className="card shadow-lg border-0 mt-2">
         <div className="card-body">
 
