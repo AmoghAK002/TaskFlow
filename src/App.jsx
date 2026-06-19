@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Tasks from "./pages/Tasks";
 import Projects from "./pages/Projects";
 import ActivityLog from "./pages/ActivityLog";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -62,6 +63,22 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+
+path="/profile"
+
+element={
+
+<ProtectedRoute>
+
+<Profile/>
+
+</ProtectedRoute>
+
+}
+
+/>
       </Routes>
 
     </BrowserRouter>

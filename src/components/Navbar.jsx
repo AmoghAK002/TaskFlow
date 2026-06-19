@@ -118,9 +118,21 @@ to="/activity-log"
 
 </NavLink>
 
+
 )
 
 }
+<NavLink
+
+to="/profile"
+
+className="nav-link"
+
+>
+
+👤 Profile
+
+</NavLink>
 
             </>
 
